@@ -7,6 +7,11 @@ function Game() {
   const [cards, setCards] = useState(cardsData);
   const [foundPairCard, setFoundPairCard] = useState(0)
   const [maximumPairCrad] = useState(cardsData.length / 2)
+  const [startTime, setStartTime] = useState(null)
+
+  useEffect(() => {
+    setStartTime(performance.now())
+  }, [])
 
   const isStackFull = useCallback(() => {
     if (stack.length === 2) {
@@ -19,7 +24,7 @@ function Game() {
       setFoundPairCard(foundPairCard + 1)
       return true
     }
-  }, [foundPairCard ,stack])
+  }, [foundPairCard, stack])
 
   const flipStackCards = useCallback(() => {
     stack.forEach(element => {
@@ -41,20 +46,34 @@ function Game() {
     }
   }, [isStackFull, isStackCardsEqual, flipStackCards, stack])
 
+  const calculateTimeAndShowWinMessage = useCallback(() => {
+    const endTime = performance.now();
+    alert(`You win the game! your time was: ${msToHMS(endTime - startTime)}`)
+  }, [startTime])
+
   useEffect(() => {
     checkStackStatus()
   }, [checkStackStatus])
 
   useEffect(() => {
     if (foundPairCard === maximumPairCrad) {
-      alert('You win the game!')
+      calculateTimeAndShowWinMessage()
     }
-  }, [maximumPairCrad, foundPairCard])
+  }, [maximumPairCrad, foundPairCard, calculateTimeAndShowWinMessage])
 
   const hasStackEnoughSpace = () => {
     if (stack.length < 2) {
       return true
     }
+  }
+
+  const msToHMS = (ms) => {
+    let seconds = ms / 1000
+    const hours = parseInt(seconds / 3600)
+    seconds = seconds % 3600
+    const minutes = parseInt(seconds / 60)
+    seconds = seconds % 60
+    return (`${hours}:${minutes}:${seconds.toFixed(3)}`);
   }
 
   const flipCard = (cardId) => {
