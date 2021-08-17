@@ -3,8 +3,10 @@ import { cardsData } from "../cards";
 import { useCallback, useEffect, useState } from "react";
 
 function Game() {
-  const [cards, setCards] = useState(cardsData);
   const [stack, setStack] = useState([])
+  const [cards, setCards] = useState(cardsData);
+  const [foundPairCard, setFoundPairCard] = useState(0)
+  const [maximumPairCrad] = useState(cardsData.length / 2)
 
   const isStackFull = useCallback(() => {
     if (stack.length === 2) {
@@ -14,9 +16,10 @@ function Game() {
 
   const isStackCardsEqual = useCallback(() => {
     if ((stack[0] % 2 === 0 && stack[0] - 1 === stack[1]) || (stack[1] % 2 === 0 && stack[1] - 1 === stack[0])) {
+      setFoundPairCard(foundPairCard + 1)
       return true
     }
-  }, [stack])
+  }, [foundPairCard ,stack])
 
   const flipStackCards = useCallback(() => {
     stack.forEach(element => {
@@ -41,6 +44,12 @@ function Game() {
   useEffect(() => {
     checkStackStatus()
   }, [checkStackStatus])
+
+  useEffect(() => {
+    if (foundPairCard === maximumPairCrad) {
+      alert('You win the game!')
+    }
+  }, [maximumPairCrad, foundPairCard])
 
   const hasStackEnoughSpace = () => {
     if (stack.length < 2) {
