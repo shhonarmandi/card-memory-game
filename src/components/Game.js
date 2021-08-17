@@ -6,37 +6,43 @@ function Game() {
   const [cards, setCards] = useState(cardsData);
   const [stack, setStack] = useState([])
 
-  const compareStackCards = useCallback(() => {
+  const isStackFull = useCallback(() => {
+    if (stack.length === 2) {
+      return true
+    }
+  }, [stack])
+
+  const isStackCardsEqual = useCallback(() => {
     if ((stack[0] % 2 === 0 && stack[0] - 1 === stack[1]) || (stack[1] % 2 === 0 && stack[1] - 1 === stack[0])) {
       return true
     }
   }, [stack])
 
-  const clearStack = useCallback(() => {
+  const flipStackCards = useCallback(() => {
     stack.forEach(element => {
       flipCard(element)
     });
     setStack([])
-  }, [stack]) 
+  }, [stack])
 
   const checkStackStatus = useCallback(() => {
-    if (stack.length === 2) {
+    if (isStackFull()) {
       stack.sort();
-      if (compareStackCards()) {
+      if (isStackCardsEqual()) {
         setStack([])
       } else {
         setTimeout(() => {
-          clearStack()
+          flipStackCards()
         }, 1500)
       }
     }
-  }, [compareStackCards, clearStack, stack])
+  }, [isStackFull, isStackCardsEqual, flipStackCards, stack])
 
   useEffect(() => {
     checkStackStatus()
   }, [checkStackStatus])
 
-  const isStackFull = () => {
+  const hasStackEnoughSpace = () => {
     if (stack.length < 2) {
       return true
     }
@@ -49,7 +55,7 @@ function Game() {
   const handleOnCardClick = (e) => {
     const currentCardId = parseInt(e.target.parentElement.getAttribute('data-testid'));
 
-    if (isStackFull()) {
+    if (hasStackEnoughSpace()) {
       flipCard(currentCardId)
       setStack([...stack, currentCardId])
     }
