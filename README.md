@@ -1,3 +1,6 @@
+## Play Online Demo
+Open [https://card-memory-game.pages.dev](https://card-memory-game.pages.dev)
+
 ## Available Scripts
 
 In the project directory:
