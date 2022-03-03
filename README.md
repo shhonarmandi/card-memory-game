@@ -1,5 +1,5 @@
-## Play Online Demo
-[https://card-memory-game.pages.dev](https://card-memory-game.pages.dev)
+## Card Memory Game
+Checkout the [demo](https://card-memory-game.pages.dev) at `https://card-memory-game.pages.dev/`
 
 ## Available Scripts
 
